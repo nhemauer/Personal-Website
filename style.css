@@ -256,6 +256,51 @@ h3 { font-size: 1.05rem; font-weight: 600; }
 .degree h3 { font: 600 1.15rem var(--serif); }
 .degree .meta + p { margin-top: 0.5rem; font-size: 0.95rem; }
 
+/* Projects */
+.projects { display: grid; gap: 1rem; }
+.project {
+  padding: 1.25rem 1.4rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.project-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+}
+.project h3 { font: 600 1.15rem var(--serif); }
+.project-link { font-size: 0.875rem; font-weight: 500; text-decoration: none; white-space: nowrap; }
+.project-link:hover { text-decoration: underline; }
+.tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.6rem; }
+.tags li {
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.project-points { margin-top: 0.85rem; display: grid; gap: 0.4rem; }
+.project-points li {
+  position: relative;
+  padding-left: 1rem;
+  color: var(--muted);
+  font-size: 0.975rem;
+}
+.project-points li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0.7em;
+  width: 0.35rem; height: 1px;
+  background: var(--muted);
+}
+
+/* Awards (reuse the publication list layout) */
+.award-note { color: var(--muted); font-size: 0.95rem; margin-top: 0.4rem; }
+
 /* ---------- Footer ---------- */
 .footer {
   display: flex;
