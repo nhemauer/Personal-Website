@@ -6,6 +6,8 @@
       ".firebaserc",
       "README.md",
       "**/.*",
+      "**/.*/**",
+      "gha-creds-*.json",
       "**/node_modules/**"
     ],
     "cleanUrls": true,

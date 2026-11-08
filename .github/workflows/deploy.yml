@@ -21,6 +21,8 @@ jobs:
       id-token: write # lets the job ask GitHub for a token to show Google
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false # the deploy doesn't need git access
 
       - uses: google-github-actions/auth@v2
         with:
