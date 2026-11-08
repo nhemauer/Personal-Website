@@ -66,13 +66,13 @@ main, .topbar-inner, .footer {
 
 .topbar-inner {
   display: flex;
-  align-items: center;
+  align-items: baseline; /* name and tabs sit on the same text line */
   gap: 1rem;
-  height: 4rem;
+  padding-block: 0.75rem;
 }
 
 .mark {
-  font: 600 1.15rem var(--serif);
+  font: 600 1.15rem/1.2 var(--serif);
   color: var(--ink);
   text-decoration: none;
   letter-spacing: 0.02em;
@@ -275,7 +275,12 @@ h3 { font-size: 1.05rem; font-weight: 600; }
 .js .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .js .reveal.visible { opacity: 1; transform: none; }
 
-.hero-text > *, .portrait { animation: rise 0.7s ease both; }
+/* Page fade-in: hidden while fonts load, then fades in as the intro rises. */
+body { transition: opacity 0.7s ease; }
+html.loading body { opacity: 0; }
+
+html:not(.loading) .hero-text > *,
+html:not(.loading) .portrait { animation: rise 0.8s ease both; }
 .hero-text > :nth-child(2) { animation-delay: 0.05s; }
 .hero-text > :nth-child(3) { animation-delay: 0.1s; }
 .hero-text > :nth-child(4) { animation-delay: 0.15s; }

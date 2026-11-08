@@ -1,5 +1,5 @@
 // Progressive enhancements only: the page reads fine without this file.
-document.documentElement.classList.add("js");
+// The "js" class is added by the inline script in index.html.
 
 document.addEventListener("DOMContentLoaded", () => {
   // Footer year

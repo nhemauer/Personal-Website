@@ -21,6 +21,24 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="style.css">
 
+  <!-- Hides the page until its fonts load (1.2s at most), then fades it in,
+       so it doesn't jump when the fonts swap in. -->
+  <script>
+    (function () {
+      var root = document.documentElement;
+      root.classList.add("js", "loading");
+      var show = function () { root.classList.remove("loading"); };
+      setTimeout(show, 1200);
+      if (document.fonts && document.fonts.load) {
+        Promise.all([
+          document.fonts.load("600 1em Fraunces"),
+          document.fonts.load("italic 400 1em Fraunces"),
+          document.fonts.load("400 1em Inter"),
+          document.fonts.load("600 1em Inter")
+        ]).then(show, show);
+      }
+    })();
+  </script>
   <script defer src="script.js"></script>
 
   <!-- Google Analytics, same property as the old site -->
