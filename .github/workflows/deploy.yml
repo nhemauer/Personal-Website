@@ -1,0 +1,35 @@
+# Deploys the site to Firebase Hosting on every push to main.
+# Signs in to Google Cloud without a stored key: GitHub vouches for this repo,
+# and only pushes to main in this repo may act as the deploy account.
+name: Deploy to Firebase Hosting
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # allows a manual redeploy from the Actions tab
+
+# One deploy at a time; a newer push replaces a deploy still waiting to start.
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # lets the job ask GitHub for a token to show Google
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/1024414696400/locations/global/workloadIdentityPools/github/providers/personal-website
+          service_account: github-deployer@nhemauer-website.iam.gserviceaccount.com
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Deploy
+        run: npx --yes firebase-tools@15.35.0 deploy --only hosting --project nhemauer-website --non-interactive
