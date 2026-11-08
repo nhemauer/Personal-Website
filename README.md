@@ -1,3 +1,3 @@
 # Personal Website
 
-Source for Nick Hemauer's personal website.
+The repo for my personal website, hosted on Firebase through Google Cloud.
