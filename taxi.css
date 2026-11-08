@@ -129,14 +129,26 @@
 }
 .work p { margin-top: 0.5rem; }
 
-.thinking { align-self: flex-start; color: var(--muted); font-size: 0.925rem; }
-.thinking::after {
+/* Steps the agent has taken; the current one has animated dots. */
+.progress { align-self: flex-start; color: var(--muted); font-size: 0.9rem; }
+.progress ol { display: grid; gap: 0.2rem; }
+.progress li { position: relative; padding-left: 1.3rem; }
+.progress li::before {
+  content: "\2713";
+  position: absolute; left: 0;
+  color: var(--accent);
+  font-size: 0.8rem;
+}
+.progress li.current { color: var(--ink); }
+.progress li.current::before { content: "\2022"; animation: blink 1s ease-in-out infinite; }
+.progress li.current::after {
   content: "";
   display: inline-block;
   width: 1.2em;
   text-align: left;
   animation: dots 1.2s steps(4) infinite;
 }
+@keyframes blink { 50% { opacity: 0.3; } }
 @keyframes dots {
   0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; }
 }
