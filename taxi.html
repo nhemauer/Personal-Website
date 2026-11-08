@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NYC Taxi Agent · Nick Hemauer</title>
+  <meta name="description" content="Ask questions in plain English about NYC yellow taxi trips. An LLM agent answers by querying BigQuery, and can estimate fares and forecast trips.">
+  <meta property="og:title" content="NYC Taxi Agent · Nick Hemauer">
+  <meta property="og:description" content="Ask an LLM agent about 15 years of NYC yellow taxi trips.">
+  <meta name="theme-color" content="#f6f3ee">
+
+  <link rel="icon" href="assets/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="taxi.css">
+
+  <!-- Renders the agent's Markdown answers, then strips anything unsafe. -->
+  <script defer src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+  <script defer src="taxi.js"></script>
+
+  <!-- Google Analytics, same property as the home page -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KH5GQMP4RF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KH5GQMP4RF');
+  </script>
+</head>
+<body>
+  <a class="skip" href="#question">Skip to the question box</a>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="mark" href="/">Nick Hemauer</a>
+      <nav aria-label="Pages">
+        <ul class="nav nav-always">
+          <li><a href="/#projects">&larr; Projects</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="agent-page">
+    <section class="agent-intro">
+      <p class="eyebrow">Project demo</p>
+      <h1>NYC Taxi Agent</h1>
+      <p class="bio">
+        Ask about NYC yellow taxi trips from 2011 to today. A Gemini agent
+        writes and runs BigQuery SQL to answer, estimates fares with a
+        random forest, and forecasts future trips.
+        <a href="https://github.com/nhemauer/NYC-Traffic-Analysis" target="_blank" rel="noopener">See the code</a>.
+      </p>
+    </section>
+
+    <section class="overview" aria-label="What the agent knows and can do">
+      <article class="card">
+        <p class="card-kicker">The data</p>
+        <h2>Every yellow taxi trip since 2011</h2>
+        <p>Public trip records from the NYC Taxi &amp; Limousine Commission,
+          aggregated in BigQuery, and updated automatically each week by a
+          scheduled Cloud Run job, with CI/CD through Cloud Build. Set up with
+          GitHub Actions to deploy the website.</p>
+        <ul>
+          <li><strong>Hourly totals</strong> of trips and fares, counted from
+            every trip, for exact figures over any period.</li>
+          <li><strong>A 1-in-1,000 sample</strong> of individual trips, for
+            details such as distances, tips and payment types.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <p class="card-kicker">Fare estimates</p>
+        <h2>What would a trip cost?</h2>
+        <p>Give a distance, pickup time, trip length and number of passengers,
+          and a random forest predicts the metered fare (before tips, tolls and
+          surcharges).</p>
+        <ul>
+          <li>Model trained on 1.3 million sampled trips from 2011 to 2026.</li>
+          <li>On held-out trips it was off by $0.54 on average (R² 0.94).</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <p class="card-kicker">Forecasts</p>
+        <h2>How busy will it be?</h2>
+        <p>Forecasts trips and average fares for future hours, days, weeks or
+          months, each with a likely range, and the busiest times of day.</p>
+        <ul>
+          <li>Histogram Gradient-Boosted models trained on hourly data since
+            2023 purposely to avoid COVID-era ride changes and NYC fare
+            changes. Inputs are time of day, day of week, season and
+            holidays.</li>
+          <li>On the last 3 months, held out, trip counts were off by 7.9% per
+            hour, beating a &ldquo;same week last year&rdquo; guess (10.6%).</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="chat" aria-label="Chat with the taxi agent">
+      <div class="chat-log" id="log" aria-live="polite">
+        <div class="starter" id="starter">
+          <p>Try one of these, or ask your own:</p>
+          <ul class="examples">
+            <li><button type="button">Which year had the most taxi trips?</button></li>
+            <li><button type="button">How did trips change during the COVID lockdown in 2020?</button></li>
+            <li><button type="button">What would a 5 mile trip at 6pm on a Friday cost, taking 25 minutes?</button></li>
+            <li><button type="button">What are the busiest hours of the day next month?</button></li>
+          </ul>
+        </div>
+      </div>
+
+      <form class="chat-form" id="form">
+        <label class="visually-hidden" for="question">Your question</label>
+        <textarea id="question" rows="1" maxlength="1000" placeholder="Ask about NYC yellow taxi trips…" required></textarea>
+        <button class="btn btn-primary" id="send" type="submit">Ask</button>
+      </form>
+      <div class="chat-foot">
+        <p>Each visitor can ask 5 questions a day. Answers come from a language
+          model and can be wrong. Questions, fare
+          estimates and forecasts are logged to improve the project.</p>
+        <button type="button" class="link-button" id="reset">New conversation</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; <span id="year">2026</span> Nick Hemauer</p>
+    <ul class="footer-links">
+      <li><a href="https://www.linkedin.com/in/nick-hemauer/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="https://github.com/nhemauer" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="https://scholar.google.com/citations?user=KtiGRW8AAAAJ&amp;hl=en" target="_blank" rel="noopener">Scholar</a></li>
+    </ul>
+  </footer>
+</body>
+</html>

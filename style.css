@@ -274,6 +274,7 @@ h3 { font-size: 1.05rem; font-weight: 600; }
 .project h3 { font: 600 1.15rem var(--serif); }
 .project-link { font-size: 0.875rem; font-weight: 500; text-decoration: none; white-space: nowrap; }
 .project-link:hover { text-decoration: underline; }
+.project-links { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; }
 .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.6rem; }
 .tags li {
   padding: 0.1rem 0.55rem;
@@ -350,4 +351,39 @@ html:not(.loading) .portrait { animation: rise 0.8s ease both; }
   .pub { grid-template-columns: 1fr; gap: 0.4rem; }
   .job { grid-template-columns: 1fr; gap: 0.4rem; }
   .job-when { padding-left: 1.5rem; }
+}
+
+/* ---------- Taxi agent link in the top bar ---------- */
+.demo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-left: auto;
+  align-self: center;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.demo-link:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+.nav + .demo-link, nav + .demo-link { margin-left: 0.5rem; }
+/* A soft pulse marks it as live. */
+.demo-dot {
+  width: 0.45rem; height: 0.45rem; border-radius: 50%;
+  background: #7ee2a8;
+  box-shadow: 0 0 0 0 rgb(126 226 168 / 0.7);
+  animation: pulse 2s ease-out infinite;
+}
+@keyframes pulse { to { box-shadow: 0 0 0 0.45rem rgb(126 226 168 / 0); } }
+@media (max-width: 760px) { nav + .demo-link { margin-left: auto; } }
+/* Mid widths: keep the name on one line and tighten the tabs to make room. */
+.mark { white-space: nowrap; }
+@media (min-width: 761px) and (max-width: 980px) {
+  .nav a { padding-inline: 0.45rem; font-size: 0.875rem; }
+  .demo-link { padding-inline: 0.7rem; }
 }

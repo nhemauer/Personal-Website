@@ -1,0 +1,186 @@
+/* The taxi agent chat page (taxi.html). Builds on the tokens in style.css. */
+
+.agent-page { padding-block: clamp(2rem, 6vw, 4rem) clamp(2rem, 5vw, 3.5rem); }
+
+.agent-intro h1 {
+  font: 600 clamp(2.25rem, 6vw, 3.5rem)/1.05 var(--serif);
+  letter-spacing: -0.02em;
+}
+.agent-intro .bio { max-width: 42rem; margin-top: 1rem; }
+
+/* The home page hides the nav on phones; this page's one link stays. */
+@media (max-width: 760px) { .nav.nav-always { display: flex; } }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---------- Overview cards ---------- */
+.overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.25rem 1.35rem;
+  font-size: 0.925rem;
+  color: var(--muted);
+}
+.card-kicker {
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.card h2 { font: 600 1.15rem/1.3 var(--serif); color: var(--ink); margin: 0.35rem 0 0.6rem; }
+.card ul { margin-top: 0.75rem; display: grid; gap: 0.4rem; }
+.card li { position: relative; padding-left: 1rem; }
+.card li::before {
+  content: "";
+  position: absolute; left: 0; top: 0.6em;
+  width: 0.35rem; height: 0.35rem; border-radius: 50%;
+  background: var(--accent);
+}
+.card strong { color: var(--ink); font-weight: 600; }
+
+/* ---------- Chat panel ---------- */
+.chat {
+  margin-top: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.chat-log {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 18rem;
+  max-height: min(65vh, 44rem);
+  overflow-y: auto;
+  padding: clamp(1rem, 3vw, 1.5rem);
+}
+
+.starter { color: var(--muted); font-size: 0.95rem; }
+.examples { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+.examples button {
+  font: 500 0.875rem/1.35 var(--sans);
+  text-align: left;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.examples button:hover { border-color: var(--accent); color: var(--accent); }
+
+.msg { max-width: 100%; font-size: 0.975rem; overflow-wrap: anywhere; }
+.msg-user {
+  align-self: flex-end;
+  max-width: min(36rem, 85%);
+  background: var(--accent);
+  color: var(--accent-ink);
+  padding: 0.6rem 0.95rem;
+  border-radius: 16px 16px 4px 16px;
+  white-space: pre-wrap;
+}
+.msg-agent { align-self: flex-start; max-width: min(46rem, 100%); }
+.msg-error { align-self: flex-start; color: #a3341f; font-size: 0.925rem; }
+
+/* Markdown inside agent answers */
+.answer > * + * { margin-top: 0.6rem; }
+.answer ul, .answer ol { padding-left: 1.25rem; }
+.answer ul { list-style: disc; }
+.answer ol { list-style: decimal; }
+.answer li + li { margin-top: 0.2rem; }
+.answer h1, .answer h2, .answer h3 { font: 600 1.05rem var(--sans); }
+.answer code {
+  font: 0.85em ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: var(--bg); padding: 0.1em 0.35em; border-radius: 4px;
+}
+.table-wrap { overflow-x: auto; }
+.answer table { border-collapse: collapse; font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+.answer th, .answer td { padding: 0.35rem 0.75rem; border-bottom: 1px solid var(--line); text-align: left; }
+.answer th { font-weight: 600; }
+
+/* "How it answered": the SQL and tools behind an answer */
+.work { margin-top: 0.6rem; font-size: 0.85rem; color: var(--muted); }
+.work summary { cursor: pointer; width: fit-content; }
+.work summary:hover { color: var(--accent); }
+.work pre {
+  margin: 0.5rem 0 0;
+  padding: 0.75rem 0.9rem;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow-x: auto;
+  font: 0.8rem/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: var(--ink);
+}
+.work p { margin-top: 0.5rem; }
+
+.thinking { align-self: flex-start; color: var(--muted); font-size: 0.925rem; }
+.thinking::after {
+  content: "";
+  display: inline-block;
+  width: 1.2em;
+  text-align: left;
+  animation: dots 1.2s steps(4) infinite;
+}
+@keyframes dots {
+  0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; }
+}
+
+/* ---------- Question box ---------- */
+.chat-form {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-end;
+  padding: 0.85rem clamp(1rem, 3vw, 1.5rem);
+  border-top: 1px solid var(--line);
+}
+.chat-form textarea {
+  flex: 1;
+  min-width: 0;
+  resize: none;
+  max-height: 10rem;
+  font: 400 1rem/1.5 var(--sans);
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.6rem 0.85rem;
+}
+.chat-form textarea:focus { outline: none; border-color: var(--accent); }
+.chat-form .btn { border: 0; cursor: pointer; font-family: var(--sans); }
+.chat-form .btn:disabled { opacity: 0.55; cursor: progress; transform: none; box-shadow: none; }
+
+.chat-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding: 0 clamp(1rem, 3vw, 1.5rem) 0.9rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.chat-foot p { max-width: 38rem; }
+.link-button {
+  font: 500 0.8rem var(--sans);
+  color: var(--accent);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.link-button:hover { text-decoration: underline; }
