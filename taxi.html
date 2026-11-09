@@ -73,11 +73,11 @@
       <article class="card">
         <p class="card-kicker">Fare estimates</p>
         <h2>What would a trip cost?</h2>
-        <p>Give a distance, pickup time, trip length, and number of passengers,
-          and a random forest predicts the metered fare.</p>
+        <p>Predicts metered fares with distance, pickup time, trip length, and
+          number of passengers.</p>
         <ul>
-          <li>Model trained on 1.3 million sampled trips from 2011 to 2026.</li>
-          <li>On held-out trips it was off by $0.54 on average (R² = 0.94).</li>
+          <li>A random forest trained on 1.3 million sampled trips from 2011 to 2026.</li>
+          <li>On held-out trips the model was off by $0.54 on average (R² = 0.94).</li>
         </ul>
       </article>
 
@@ -85,7 +85,7 @@
         <p class="card-kicker">Forecasts</p>
         <h2>How busy will it be?</h2>
         <p>Forecasts trips and average fares for future hours, days, weeks, or
-          months, each with a likely range, and the busiest times of day.</p>
+          months.</p>
         <ul>
           <li>Histogram gradient-boosted models trained on hourly data since
             2023 purposely to avoid COVID-era ride changes and NYC fare
